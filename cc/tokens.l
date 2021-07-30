@@ -1,5 +1,5 @@
 %{
-    #include <ucc_lexer.h>
+    #include <cc_lexer.h>
     void yyerror (char *s);
     int yylex();
 %}

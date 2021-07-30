@@ -1,7 +1,7 @@
 #include "cc.h"
 
 extern "C" {
-    #include <ucc_lexer.h>
+    #include <cc_lexer.h>
 }
 
 extern FILE* yyin;
