@@ -47,11 +47,6 @@ primary_expression      : INT_LITERAL
 
 %%
 
-int main()
-{
-    yyparse();
-}
-
 void yyerror(char* s)
 {
     fprintf(stderr, "%s\n", s);

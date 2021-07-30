@@ -1,5 +1,5 @@
 %{
-    #include "y.tab.h"
+    #include <ucc_lexer.h>
     void yyerror (char *s);
     int yylex();
 %}
