@@ -1,14 +1,23 @@
 %{
+    #include <parser.h>
+    #include <stdint.h>
+
     int yylex();
     void yyerror(const char* message);
 %}
 
 %define parse.error verbose
 
-%union { char* id; int num; }
-%token <id> IDENTIFIER
-%token <num> INT_LITERAL
+%union {
+    const char* token;
+    Expression* expr;
+    Statement* stmt;
+}
+
 %token RETURN
+%token <token> INT_LITERAL IDENTIFIER
+%type <expr> primary_expression expression
+%type <stmt> statement statement_list
 
 %start declaration_list
 
@@ -35,20 +44,22 @@ type                    : IDENTIFIER
                         | type '*'
                         ;
 
-statement_list          : statement
-                        | statement_list statement
+statement_list          : statement                     { ; }
+                        | statement_list statement      { ; }
                         ;
 
-statement               : ';'
-                        | '{' statement_list '}'
-                        | RETURN expression ';'
+statement               : ';'                           { $$ = new EmptyStatement(); }
+                        | '{' statement_list '}'        { $$ = $2; }
+                        | RETURN expression ';'         { $$ = new ReturnStatement($2); }
                         ;
 
-expression              : '(' expression ')'
-                        | primary_expression
+expression              : '(' expression ')'            { $$ = $2; }
+                        | primary_expression            { $$ = $1; }
                         ;
 
-primary_expression      : INT_LITERAL
+primary_expression      : INT_LITERAL                   { $$ = new IntLiteralExpression($1); }
+                        | IDENTIFIER                    { $$ = new VariableExpression($1); }
+                        | '(' primary_expression ')'    { $$ = $2; }
                         ;
 
 %%

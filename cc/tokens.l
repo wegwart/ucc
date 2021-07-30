@@ -1,6 +1,7 @@
 %{
+    #include <parser.h>
     #include <cc_lexer.h>
-    void yyerror (char *s);
+    void yyerror (const char *s);
     int yylex();
 %}
 
@@ -9,8 +10,8 @@
 %%
 
 "return"                    { return RETURN; }
-[a-zA-Z_]+[a-zA-Z0-9_]*     { yylval.id = yytext; return IDENTIFIER; }
-[0-9]+                      { yylval.num = atoi(yytext); return INT_LITERAL; }
+[a-zA-Z_]+[a-zA-Z0-9_]*     { yylval.token = yytext; return IDENTIFIER; }
+[0-9]+                      { yylval.token = yytext; return INT_LITERAL; }
 [ \t\n]                     { }
 [\{\},\(\);\*]              { return yytext[0]; }
 .                           { ECHO; yyerror ("unexpected character"); fprintf(stderr, "%c", yytext[0]); }
