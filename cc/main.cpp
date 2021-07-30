@@ -1,13 +1,11 @@
-extern "C" {
-    #include <ucc_lexer.h>
-}
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <getopt.h>
 
 #include <vector>
 #include <string>
+
+#include "cc.h"
 
 static void print_version()
 {
@@ -48,5 +46,21 @@ int main(int argc, char* argv[])
     while (opt_index < argc)
         input_files.push_back(argv[opt_index++]);
     
-    yyparse();
+    if (input_files.size() == 0)
+    {
+        fprintf(stderr, "fatal: no input files\n");
+        return EXIT_FAILURE;
+    }
+
+    for (auto& file : input_files)
+    {
+        FILE* f_ptr = fopen(file.c_str(), "r");
+        if (f_ptr == NULL)
+        {
+            fprintf(stderr, "error: %s: cannot open file\n", file.c_str());
+            return EXIT_FAILURE;
+        }
+
+        parser::parse(f_ptr);
+    }
 }
