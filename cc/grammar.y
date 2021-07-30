@@ -19,7 +19,8 @@ declaration_list        : declaration
                         ;
 
 declaration             : function_declaration ';'
-                        | function_declaration '{' statement '}'
+                        | function_declaration '{' '}'
+                        | function_declaration '{' statement_list '}'
                         ;
 
 function_declaration    : type IDENTIFIER '(' arg_list ')'
@@ -33,10 +34,13 @@ arg_list                :
 type                    : IDENTIFIER
                         ;
 
-statement               :
-                        | ';'
-                        | '{' statement '}'
-                        | statement RETURN expression ';'
+statement_list          : statement
+                        | statement_list statement
+                        ;
+
+statement               : ';'
+                        | '{' statement_list '}'
+                        | RETURN expression ';'
                         ;
 
 expression              : '(' expression ')'
