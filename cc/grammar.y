@@ -5,6 +5,8 @@
     #include <stdio.h>
 %}
 
+%define parse.error verbose
+
 %union { char* id; int num; }
 %token <id> IDENTIFIER
 %token <num> INT_LITERAL
@@ -36,7 +38,7 @@ type                    : IDENTIFIER
 statement               :
                         | ';'
                         | '{' statement '}'
-                        | RETURN expression ';'
+                        | statement RETURN expression ';'
                         ;
 
 expression              : '(' expression ')'
@@ -47,8 +49,3 @@ primary_expression      : INT_LITERAL
                         ;
 
 %%
-
-void yyerror(char* s)
-{
-    fprintf(stderr, "%s\n", s);
-}
