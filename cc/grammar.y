@@ -32,6 +32,7 @@ arg_list                :
                         ;
 
 type                    : IDENTIFIER
+                        | type '*'
                         ;
 
 statement_list          : statement
