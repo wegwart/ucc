@@ -1,8 +1,6 @@
 %{
-    void yyerror (char *s);
     int yylex();
-
-    #include <stdio.h>
+    void yyerror(const char* message);
 %}
 
 %define parse.error verbose
