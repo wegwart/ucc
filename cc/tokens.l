@@ -3,6 +3,9 @@
     void yyerror (char *s);
     int yylex();
 %}
+
+%option yylineno
+
 %%
 
 "return"                    { return RETURN; }

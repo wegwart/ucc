@@ -5,6 +5,7 @@ extern "C" {
 }
 
 extern FILE* yyin;
+extern int yylineno;
 
 namespace parser {
 
@@ -16,7 +17,7 @@ namespace parser {
 
     extern "C" void yyerror(const char* message)
     {
-        fprintf(stderr, "%s\n", message);
+        fprintf(stderr, "line %d: %s\n", yylineno, message);
     }
 
 }
