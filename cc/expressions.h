@@ -21,7 +21,8 @@ class IntLiteralExpression : public Expression
 class StrLiteralExpression : public Expression
 {
   public:
-    StrLiteralExpression(const char* str);
+    StrLiteralExpression(const char* str)
+      : m_str(str) { }
 
   private:
     std::string m_str;
@@ -30,8 +31,63 @@ class StrLiteralExpression : public Expression
 class VariableExpression : public Expression
 {
   public:
-    VariableExpression(const char* variable_name);
+    VariableExpression(const char* variable_name)
+      : m_name(variable_name) { }
 
   private:
-    std::string m_varname;
+    std::string m_name;
+};
+
+class UnaryExpr : public Expression
+{
+  public:
+    enum UnaryOp
+    {
+        Negative,
+        AddressOf,
+        SizeOf,
+        Inverting,
+        Negation,
+        Deref
+    };
+
+    UnaryExpr(UnaryOp op, Expression* expr)
+      : m_expr(expr)
+      , m_operation(op) { }
+  
+  private:
+    Expression* m_expr;
+    UnaryOp m_operation;
+};
+
+class BinaryExpr : public Expression
+{
+  public:
+    enum BinaryOp
+    {
+        Multiplication,
+        Division,
+        Modulo,
+        Addition,
+        Subtraction
+    };
+
+    BinaryExpr(BinaryOp op, Expression* expr1, Expression* expr2)
+      : m_left(expr1)
+      , m_right(expr2)
+      , m_operation(op) { }
+  
+  private:
+    Expression *m_left, *m_right;
+    BinaryOp m_operation;
+};
+
+class CastExpr : public Expression
+{
+  public:
+    CastExpr(Expression* expr)
+      : m_expr(expr) { }
+
+  private:
+    Expression* m_expr;
 };
