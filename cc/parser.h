@@ -4,29 +4,7 @@
 #include <string>
 #include <vector>
 
-class Expression
-{
-  public:
-    Expression() = default;
-};
-
-class IntLiteralExpression : public Expression
-{
-  public:
-    IntLiteralExpression(const char* num_str, int base = 10);
-
-  private:
-    uint64_t m_num;
-};
-
-class VariableExpression : public Expression
-{
-  public:
-    VariableExpression(const char* variable_name);
-
-  private:
-    std::string m_varname;
-};
+#include "expressions.h"
 
 class Statement
 {

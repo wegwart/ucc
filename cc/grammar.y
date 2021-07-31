@@ -15,7 +15,7 @@
 }
 
 %token RETURN
-%token <token> INT_LITERAL IDENTIFIER
+%token <token> INT_LITERAL STR_LITERAL IDENTIFIER
 %type <expr> primary_expression expression
 %type <stmt> statement statement_list
 
@@ -58,6 +58,7 @@ expression              : '(' expression ')'            { $$ = $2; }
                         ;
 
 primary_expression      : INT_LITERAL                   { $$ = new IntLiteralExpression($1); }
+                        | STR_LITERAL                   { $$ = new StrLiteralExpression($1); }
                         | IDENTIFIER                    { $$ = new VariableExpression($1); }
                         | '(' primary_expression ')'    { $$ = $2; }
                         ;

@@ -10,6 +10,7 @@
 %%
 
 "return"                    { return RETURN; }
+\"[^\n\"]*\"                { yylval.token = yytext; return STR_LITERAL; }
 [a-zA-Z_]+[a-zA-Z0-9_]*     { yylval.token = yytext; return IDENTIFIER; }
 [0-9]+                      { yylval.token = yytext; return INT_LITERAL; }
 [ \t\n]                     { }

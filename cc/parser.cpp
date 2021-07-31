@@ -11,6 +11,12 @@ IntLiteralExpression::IntLiteralExpression(const char* num_str, int base)
     m_num = strtoull(num_str, nullptr, base);
 }
 
+StrLiteralExpression::StrLiteralExpression(const char* str)
+{
+    // TODO: remove '"' characters
+    m_str = str;
+}
+
 VariableExpression::VariableExpression(const char* variable_name)
 {
     m_varname = variable_name;
