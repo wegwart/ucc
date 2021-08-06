@@ -7,6 +7,7 @@ class Expression
 {
   public:
     Expression() = default;
+    virtual ~Expression() = default;
 };
 
 class IntLiteralExpression : public Expression

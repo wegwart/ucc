@@ -11,11 +11,10 @@
 
 "sizeof"                    { return SIZEOF; }
 "return"                    { return RETURN; }
-\"[^\n\"]*\"                { yylval.token = yytext; return STR_LITERAL; }
-[a-zA-Z_]+[a-zA-Z0-9_]*     { yylval.token = yytext; return IDENTIFIER; }
-[0-9]+                      { yylval.token = yytext; return INT_LITERAL; }
+"const"                     { return CONST;  }
+[a-zA-Z_]+[a-zA-Z0-9_]*     { strcpy(yylval.token, yytext); return IDENTIFIER; }
 [ \t\n]                     { }
-[!~&+-/%\{\},\(\);\*]          { return yytext[0]; }
+[!~&+-/%\{\},\(\);\*\[\]]   { return yytext[0]; }
 .                           { ECHO; yyerror ("unexpected character"); fprintf(stderr, "%c", yytext[0]); }
 
 %%

@@ -9,15 +9,17 @@
 %define parse.error verbose
 
 %union {
-    const char* token;
-    Expression* expr;
+    char token[128];
+    Function* func;
     Statement* stmt;
+    StatementList* stmt_list;
 }
 
-%token RETURN SIZEOF
-%token <token> INT_LITERAL STR_LITERAL IDENTIFIER
-%type <expr> primary_expr postfix_expr unary_expr cast_expr multiplicative_expr additive_expr expression
-%type <stmt> statement statement_list
+%token RETURN SIZEOF CONST
+%token <token> IDENTIFIER
+%type <func> function_declaration
+%type <stmt_list> statement_list
+%type <stmt> statement
 
 %start declaration_list
 
@@ -28,66 +30,30 @@ declaration_list        : declaration
                         ;
 
 declaration             : function_declaration ';'
-                        | function_declaration '{' '}'
-                        | function_declaration '{' statement_list '}'
+                        | function_declaration '{' '}'                  { ($1)->define(); }
+                        | function_declaration '{' statement_list '}'   { ($1)->define($3); }
                         ;
 
-function_declaration    : type IDENTIFIER '(' arg_list ')'
+function_declaration    : type_ref IDENTIFIER '(' ')'                   { $$ = Function::declare($2); }
+                        | type_ref IDENTIFIER '(' arg_list ')'          { $$ = Function::declare($2); }
                         ;
 
-arg_list                :
-                        | type IDENTIFIER
-                        | type IDENTIFIER ',' arg_list
+arg_list                : type_ref IDENTIFIER
+                        | type_ref IDENTIFIER '[' ']'
+                        | arg_list ',' type_ref IDENTIFIER
+                        | arg_list ',' type_ref IDENTIFIER '[' ']'
                         ;
 
-type                    : IDENTIFIER
-                        | type '*'
+type_ref                : IDENTIFIER
+                        | CONST IDENTIFIER
+                        | type_ref '*'
                         ;
 
-statement_list          : statement                     { ; }
-                        | statement_list statement      { ; }
+statement_list          : statement                                     { $$ = new StatementList($1); }
+                        | statement_list statement                      { $$ = ($1)->add($2); }
                         ;
 
-statement               : ';'                           { $$ = new EmptyStatement(); }
-                        | '{' statement_list '}'        { $$ = $2; }
-                        | expression                    { }
-                        | RETURN expression ';'         { $$ = new ReturnStatement($2); }
-                        ;
-
-expression              : additive_expr             { $$ = $1; }
-                        ;
-
-additive_expr           : multiplicative_expr                       { $$ = $1; }
-                        | additive_expr '+' multiplicative_expr     { $$ = new BinaryExpr(BinaryExpr::Addition, $1, $3); }
-                        | additive_expr '-' multiplicative_expr     { $$ = new BinaryExpr(BinaryExpr::Subtraction, $1, $3); }
-
-multiplicative_expr     : cast_expr                             { $$ = $1; }
-                        | multiplicative_expr '*' cast_expr     { $$ = new BinaryExpr(BinaryExpr::Multiplication, $1, $3); }
-                        | multiplicative_expr '/' cast_expr     { $$ = new BinaryExpr(BinaryExpr::Division, $1, $3); }
-                        | multiplicative_expr '%' cast_expr     { $$ = new BinaryExpr(BinaryExpr::Modulo, $1, $3); }
-                        ;
-
-cast_expr               : unary_expr                { $$ = $1; }
-                        | '(' type ')' cast_expr    { $$ = new CastExpr($4); }
-                        ;
-
-unary_expr              : postfix_expr          { $$ = $1; }
-                        | '-' postfix_expr      { $$ = new UnaryExpr(UnaryExpr::Negative, $2); }
-                        | '+' postfix_expr      { $$ = $2; }
-                        | '&' postfix_expr      { $$ = new UnaryExpr(UnaryExpr::AddressOf, $2); }
-                        | '*' postfix_expr      { $$ = new UnaryExpr(UnaryExpr::Deref, $2); }
-                        | '~' postfix_expr      { $$ = new UnaryExpr(UnaryExpr::Inverting, $2); }
-                        | '!' postfix_expr      { $$ = new UnaryExpr(UnaryExpr::Negation, $2); }
-                        | SIZEOF unary_expr     { $$ = new UnaryExpr(UnaryExpr::SizeOf, $2); }
-                        ;
-
-postfix_expr            : primary_expr          { $$ = $1; }
-	                    ;
-
-primary_expr            : INT_LITERAL           { $$ = new IntLiteralExpression($1); }
-                        | STR_LITERAL           { $$ = new StrLiteralExpression($1); }
-                        | IDENTIFIER            { $$ = new VariableExpression($1); }
-                        | '(' primary_expr ')'  { $$ = $2; }
+statement               : ';'                                           { $$ = new EmptyStatement(); }
                         ;
 
 %%
