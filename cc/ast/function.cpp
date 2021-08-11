@@ -1,4 +1,7 @@
 #include <ast/function.h>
+#include <cassert>
+
+using namespace ast;
 
 std::vector<Function*> Function::s_functions;
 
@@ -9,6 +12,17 @@ Function::Function(const std::string& name)
 const std::string& Function::name() const
 {
     return m_name;
+}
+
+bool Function::hasImplementation() const
+{
+    return m_definition != nullptr;
+}
+
+const Statement& Function::getImplementation() const
+{
+    assert(m_definition != nullptr);
+    return *m_definition;
 }
 
 Function* Function::declare(const std::string& name)

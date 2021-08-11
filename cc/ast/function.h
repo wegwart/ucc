@@ -5,26 +5,32 @@
 
 #include <ast/statement.h>
 
-class Function
-{
-  public:
-    const std::string& name() const;
+namespace ast {
 
-    static Function* declare(const std::string& name);
+    class Function
+    {
+      public:
+        const std::string& name() const;
+        bool hasImplementation() const;
+        const Statement& getImplementation() const;
 
-    void define();
-    void define(Statement* stmts);
+        static Function* declare(const std::string& name);
 
-  private:
-    std::string m_name;
-    // Type m_returnType;
-    // ArgList* m_arguments;
+        void define();
+        void define(Statement* stmts);
 
-    // If m_definition is nullptr, then the function
-    // hasn't been defined, yet.
-    Statement* m_definition;
+      private:
+        std::string m_name;
+        // Type m_returnType;
+        // ArgList* m_arguments;
 
-  private:
-    Function(const std::string& name);
-    static std::vector<Function*> s_functions;
-};
+        // If m_definition is nullptr, then the function
+        // hasn't been defined, yet.
+        Statement* m_definition;
+
+      private:
+        Function(const std::string& name);
+        static std::vector<Function*> s_functions;
+    };
+
+}

@@ -2,26 +2,30 @@
 
 #include <vector>
 
-class Statement
-{
-  public:
-    Statement() = default;
-    virtual ~Statement() = default;
-};
+namespace ast {
 
-class EmptyStatement : public Statement
-{
-  public:
-    EmptyStatement() = default;
-};
+    class Statement
+    {
+      public:
+        Statement() = default;
+        virtual ~Statement() = default;
+    };
 
-class StatementList : public Statement
-{
-  public:
-    StatementList() = default;
-    StatementList(Statement* stmt);
-    StatementList* add(Statement* stmt);
+    class EmptyStatement : public Statement
+    {
+      public:
+        EmptyStatement() = default;
+    };
 
-  private:
-    std::vector<Statement*> m_statements;
-};
+    class StatementList : public Statement
+    {
+      public:
+        StatementList() = default;
+        StatementList(Statement* stmt);
+        StatementList* add(Statement* stmt);
+
+      private:
+        std::vector<Statement*> m_statements;
+    };
+
+}

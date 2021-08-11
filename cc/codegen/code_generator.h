@@ -6,6 +6,8 @@
 #include <llvm/IR/LLVMContext.h>
 #include <llvm/IR/IRBuilder.h>
 
+#include <ast/function.h>
+
 namespace codegen {
 
     class CodeGenerator
@@ -13,6 +15,9 @@ namespace codegen {
       public:
         CodeGenerator(const std::string& programName);
         ~CodeGenerator() = default;
+
+        void genFunction(ast::Function* function);
+        void genStatements(const ast::Statement& stmt);
       
       private:
         std::unique_ptr<llvm::Module> m_module;

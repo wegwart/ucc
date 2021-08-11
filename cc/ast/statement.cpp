@@ -1,5 +1,7 @@
 #include <ast/statement.h>
 
+using namespace ast;
+
 StatementList::StatementList(Statement* stmt)
 {
     add(stmt);
