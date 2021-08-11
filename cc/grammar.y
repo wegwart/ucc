@@ -18,8 +18,7 @@
 %token RETURN SIZEOF CONST
 %token <token> IDENTIFIER
 %type <func> function_declaration
-%type <stmt_list> statement_list
-%type <stmt> statement
+%type <stmt> statement statement_list
 
 %start declaration_list
 
@@ -39,18 +38,15 @@ function_declaration    : type_ref IDENTIFIER '(' ')'                   { $$ = F
                         ;
 
 arg_list                : type_ref IDENTIFIER
-                        | type_ref IDENTIFIER '[' ']'
                         | arg_list ',' type_ref IDENTIFIER
-                        | arg_list ',' type_ref IDENTIFIER '[' ']'
                         ;
 
 type_ref                : IDENTIFIER
-                        | CONST IDENTIFIER
                         | type_ref '*'
                         ;
 
 statement_list          : statement                                     { $$ = new StatementList($1); }
-                        | statement_list statement                      { $$ = ($1)->add($2); }
+                        | statement_list statement                      { $$ = ((StatementList*)$1)->add($2); }
                         ;
 
 statement               : ';'                                           { $$ = new EmptyStatement(); }

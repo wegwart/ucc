@@ -14,7 +14,7 @@ class Function
     static Function* declare(const std::string& name);
 
     void define();
-    void define(StatementList* stmts);
+    void define(Statement* stmts);
 
   private:
     std::string m_name;
@@ -23,7 +23,7 @@ class Function
 
     // If m_definition is nullptr, then the function
     // hasn't been defined, yet.
-    StatementList* m_definition;
+    Statement* m_definition;
 
   private:
     Function(const std::string& name);

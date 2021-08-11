@@ -31,10 +31,10 @@ Function* Function::declare(const std::string& name)
 
 void Function::define()
 {
-    m_definition = new StatementList();
+    m_definition = new EmptyStatement();
 }
 
-void Function::define(StatementList* stmts)
+void Function::define(Statement* stmts)
 {
     m_definition = stmts;
 }

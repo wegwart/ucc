@@ -15,7 +15,7 @@ class EmptyStatement : public Statement
     EmptyStatement() = default;
 };
 
-class StatementList
+class StatementList : public Statement
 {
   public:
     StatementList() = default;
