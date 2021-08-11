@@ -1,6 +1,6 @@
 #pragma once
 
-#include <stdint.h>
+#include <cstdint>
 #include <string>
 
 class Expression
@@ -23,7 +23,8 @@ class StrLiteralExpression : public Expression
 {
   public:
     StrLiteralExpression(const char* str)
-      : m_str(str) { }
+      : m_str(str)
+    { }
 
   private:
     std::string m_str;
@@ -33,7 +34,8 @@ class VariableExpression : public Expression
 {
   public:
     VariableExpression(const char* variable_name)
-      : m_name(variable_name) { }
+      : m_name(variable_name)
+    { }
 
   private:
     std::string m_name;
@@ -54,7 +56,8 @@ class UnaryExpr : public Expression
 
     UnaryExpr(UnaryOp op, Expression* expr)
       : m_expr(expr)
-      , m_operation(op) { }
+      , m_operation(op)
+    { }
   
   private:
     Expression* m_expr;
@@ -76,7 +79,8 @@ class BinaryExpr : public Expression
     BinaryExpr(BinaryOp op, Expression* expr1, Expression* expr2)
       : m_left(expr1)
       , m_right(expr2)
-      , m_operation(op) { }
+      , m_operation(op)
+    { }
   
   private:
     Expression *m_left, *m_right;
@@ -87,7 +91,8 @@ class CastExpr : public Expression
 {
   public:
     CastExpr(Expression* expr)
-      : m_expr(expr) { }
+      : m_expr(expr)
+    { }
 
   private:
     Expression* m_expr;

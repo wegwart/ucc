@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
-#include <expressions.h>
-#include <function.h>
-#include <statement.h>
+#include <ast/expressions.h>
+#include <ast/function.h>
+#include <ast/statement.h>
+
+void parse(FILE* f);

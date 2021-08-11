@@ -1,4 +1,4 @@
-#include <function.h>
+#include <ast/function.h>
 
 std::vector<Function*> Function::s_functions;
 

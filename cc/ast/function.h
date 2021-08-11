@@ -2,9 +2,8 @@
 
 #include <string>
 #include <vector>
-#include "cc.h"
-#include "parser.h"
-#include <statement.h>
+
+#include <ast/statement.h>
 
 class Function
 {

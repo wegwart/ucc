@@ -1,11 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <getopt.h>
-
 #include <vector>
 #include <string>
 
-#include "cc.h"
+#include <parser.h>
 
 static void print_version()
 {
@@ -61,6 +60,6 @@ int main(int argc, char* argv[])
             return EXIT_FAILURE;
         }
 
-        parser::parse(f_ptr);
+        parse(f_ptr);
     }
 }
