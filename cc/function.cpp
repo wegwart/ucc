@@ -17,15 +17,13 @@ Function* Function::declare(const std::string& name)
     {
         if (func->name() == name)
         {
-            printf("function '%s' redeclared\n", name.c_str());
-            // make sure the signature matches!
+            // TODO: make sure the signature matches!
             return func;
         }
     }
 
     auto func = new Function(name);
     s_functions.push_back(func);
-    printf("function '%s' declared\n", name.c_str());
     return func;
 }
 
