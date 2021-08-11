@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.14)
 
 project(ucc VERSION 0.1)
 
+enable_testing()
+
 find_package(BISON)
 find_package(FLEX)
 
@@ -31,3 +33,4 @@ add_executable(ucc
 target_include_directories(ucc PRIVATE ${CMAKE_BINARY_DIR})
 target_include_directories(ucc PRIVATE ${CMAKE_SOURCE_DIR}/cc)
 
+add_subdirectory(tests)
