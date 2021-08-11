@@ -8,5 +8,8 @@ Currently, I'm working on the parser to build an abstract syntax tree (AST). At 
 recognize function declarations and definitions as well as simple expressions.
 
 ### Build and run
-You'll need CMake and bison/flex as well as a C++ compiler to build the project. Use the standard CMake
-build and run procedure to build the project.
+Use the standard CMake build procedure. The following prerequisites have to be installed
+on your machine before you can build:
+* bison
+* flex
+* llvm-dev
