@@ -4,33 +4,35 @@
 #include <vector>
 
 #include <ast/statement.h>
+#include <ast/object.h>
 
 namespace ast {
 
-    class Function
+    class FunctionDeclaration : public AstObject
     {
       public:
-        const std::string& name() const;
-        bool hasImplementation() const;
-        const Statement& getImplementation() const;
+        FunctionDeclaration(const std::string& name);
 
-        static Function* declare(const std::string& name);
+        const std::string& getName() const;
 
-        void define();
-        void define(Statement* stmts);
-
+        void visit(AstVisitor* visitor) const override;
+      
       private:
         std::string m_name;
-        // Type m_returnType;
-        // ArgList* m_arguments;
+    };
 
-        // If m_definition is nullptr, then the function
-        // hasn't been defined, yet.
-        Statement* m_definition;
+    class FunctionDefinition : public AstObject
+    {
+      public:
+        FunctionDefinition(size_t decl, size_t stmt);
 
+        std::shared_ptr<const FunctionDeclaration> getDeclaration() const;
+
+        void visit(AstVisitor* visitor) const override;
+      
       private:
-        Function(const std::string& name);
-        static std::vector<Function*> s_functions;
+        std::shared_ptr<const FunctionDeclaration> m_declaration;
+        std::shared_ptr<const Statement> m_implementation;
     };
 
 }

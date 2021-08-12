@@ -1,10 +1,13 @@
 #pragma once
 
 #include <vector>
+#include <memory>
+
+#include <ast/object.h>
 
 namespace ast {
 
-    class Statement
+    class Statement : public AstObject
     {
       public:
         Statement() = default;
@@ -21,11 +24,11 @@ namespace ast {
     {
       public:
         StatementList() = default;
-        StatementList(Statement* stmt);
-        StatementList* add(Statement* stmt);
+        StatementList(size_t stmt);
+        size_t add(size_t stmt);
 
       private:
-        std::vector<Statement*> m_statements;
+        std::vector<std::shared_ptr<const Statement>> m_statements;
     };
 
 }

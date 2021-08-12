@@ -10,14 +10,12 @@
 
 %union {
     char token[128];
-    ast::Function* func;
-    ast::Statement* stmt;
+    size_t ast_object;
 }
 
 %token RETURN SIZEOF CONST
 %token <token> IDENTIFIER
-%type <func> function_declaration
-%type <stmt> statement statement_list
+%type <ast_object> function_declaration statement statement_list
 
 %start declaration_list
 
@@ -28,12 +26,12 @@ declaration_list        : declaration
                         ;
 
 declaration             : function_declaration ';'
-                        | function_declaration '{' '}'                  { ($1)->define(); }
-                        | function_declaration '{' statement_list '}'   { ($1)->define($3); }
+                        | function_declaration '{' '}'                  { AST_ADD_TOP(FunctionDefinition, $1, AST_ADD(EmptyStatement)); }
+                        | function_declaration '{' statement_list '}'   { AST_ADD_TOP(FunctionDefinition, $1, $3); }
                         ;
 
-function_declaration    : type_ref IDENTIFIER '(' ')'                   { $$ = ast::Function::declare($2); }
-                        | type_ref IDENTIFIER '(' arg_list ')'          { $$ = ast::Function::declare($2); }
+function_declaration    : type_ref IDENTIFIER '(' ')'                   { $$ = AST_ADD_TOP(FunctionDeclaration, $2); }
+                        | type_ref IDENTIFIER '(' arg_list ')'          { $$ = AST_ADD_TOP(FunctionDeclaration, $2); }
                         ;
 
 arg_list                : type_ref IDENTIFIER
@@ -44,11 +42,11 @@ type_ref                : IDENTIFIER
                         | type_ref '*'
                         ;
 
-statement_list          : statement                                     { $$ = new ast::StatementList($1); }
-                        | statement_list statement                      { $$ = ((ast::StatementList*)$1)->add($2); }
+statement_list          : statement                                     { $$ = AST_ADD(StatementList, $1); }
+                        | statement_list statement                      { $$ = AST_FIND(StatementList, $1)->add($2); }
                         ;
 
-statement               : ';'                                           { $$ = new ast::EmptyStatement(); }
+statement               : ';'                                           { $$ = AST_ADD(EmptyStatement); }
                         ;
 
 %%

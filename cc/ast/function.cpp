@@ -1,52 +1,35 @@
 #include <ast/function.h>
 #include <cassert>
+#include <parser.h>
 
 using namespace ast;
 
-std::vector<Function*> Function::s_functions;
-
-Function::Function(const std::string& name)
+FunctionDeclaration::FunctionDeclaration(const std::string& name)
     : m_name(name)
 { }
 
-const std::string& Function::name() const
+void FunctionDeclaration::visit(AstVisitor* visitor) const
+{
+    visitor->visitFunctionDeclaration(Ast::get().resolve<FunctionDeclaration>(getId()));
+}
+
+const std::string& FunctionDeclaration::getName() const
 {
     return m_name;
 }
 
-bool Function::hasImplementation() const
+FunctionDefinition::FunctionDefinition(size_t decl, size_t stmt)
 {
-    return m_definition != nullptr;
+    m_declaration = Ast::get().resolve<const FunctionDeclaration>(decl);
+    m_implementation = Ast::get().resolve<const Statement>(stmt);
 }
 
-const Statement& Function::getImplementation() const
+std::shared_ptr<const FunctionDeclaration> FunctionDefinition::getDeclaration() const
 {
-    assert(m_definition != nullptr);
-    return *m_definition;
+    return m_declaration;
 }
 
-Function* Function::declare(const std::string& name)
+void FunctionDefinition::visit(AstVisitor* visitor) const
 {
-    for (const auto func : s_functions)
-    {
-        if (func->name() == name)
-        {
-            // TODO: make sure the signature matches!
-            return func;
-        }
-    }
-
-    auto func = new Function(name);
-    s_functions.push_back(func);
-    return func;
-}
-
-void Function::define()
-{
-    m_definition = new EmptyStatement();
-}
-
-void Function::define(Statement* stmts)
-{
-    m_definition = stmts;
+    visitor->visitFunctionDefinition(Ast::get().resolve<FunctionDefinition>(getId()));
 }

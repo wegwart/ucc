@@ -2,13 +2,15 @@
 
 using namespace ast;
 
-StatementList::StatementList(Statement* stmt)
+StatementList::StatementList(size_t stmt)
 {
     add(stmt);
 }
 
-StatementList* StatementList::add(Statement* stmt)
+size_t StatementList::add(size_t stmt)
 {
-    m_statements.push_back(stmt);
-    return this;
+    m_statements.push_back(
+        Ast::get().resolve<const Statement>(stmt)
+    );
+    return getId();
 }

@@ -5,6 +5,7 @@
 #include <string>
 
 #include <parser.h>
+#include <codegen/generator.h>
 
 static void print_version()
 {
@@ -14,6 +15,14 @@ static void print_version()
 static void print_help()
 {
     printf("help goes here\n");
+}
+
+static void compile(FILE* f)
+{
+    parse(f);
+
+    codegen::CodeGenerator generator{ "myprogram" };
+    ast::Ast::get().visit(&generator);
 }
 
 int main(int argc, char* argv[])
@@ -60,6 +69,6 @@ int main(int argc, char* argv[])
             return EXIT_FAILURE;
         }
 
-        parse(f_ptr);
+        compile(f_ptr);
     }
 }

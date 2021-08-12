@@ -10,14 +10,17 @@
 
 namespace codegen {
 
-    class CodeGenerator
+    class CodeGenerator : public ast::AstVisitor
     {
       public:
         CodeGenerator(const std::string& programName);
-        ~CodeGenerator() = default;
+        ~CodeGenerator();
 
-        void genFunction(ast::Function* function);
-        void genStatements(const ast::Statement& stmt);
+        void visitFunctionDeclaration(
+            std::shared_ptr<const ast::FunctionDeclaration> functionDeclaration) override;        
+        
+        void visitFunctionDefinition(
+            std::shared_ptr<const ast::FunctionDefinition> functionDefinition) override;
       
       private:
         std::unique_ptr<llvm::Module> m_module;

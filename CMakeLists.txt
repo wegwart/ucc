@@ -32,12 +32,14 @@ add_flex_bison_dependency(ucc_lexer ucc_parser)
 add_executable(ucc
     cc/main.cpp
     cc/parser.cpp
+    cc/ast/object.h
+    cc/ast/object.cpp
     cc/ast/function.h
     cc/ast/function.cpp
     cc/ast/statement.h
     cc/ast/statement.cpp
-    cc/codegen/code_generator.h
-    cc/codegen/code_generator.cpp
+    cc/codegen/generator.h
+    cc/codegen/generator.cpp
     ${BISON_ucc_parser_OUTPUTS}
     ${FLEX_ucc_lexer_OUTPUTS}
 )
