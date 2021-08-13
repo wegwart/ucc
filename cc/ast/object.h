@@ -3,12 +3,12 @@
 #include <map>
 #include <vector>
 #include <memory>
-#include <ast/visitor.h>
 #include <cassert>
 
 namespace ast {
 
     class AstObject;
+    class AstVisitor;
 
     class Ast
     {
@@ -41,7 +41,7 @@ namespace ast {
       public:
         AstObject();
         virtual ~AstObject() = default;
-        virtual void visit(AstVisitor* visitor) const { }
+        virtual void visit(AstVisitor* visitor) const = 0;
 
         size_t getId() const { return m_id; }
 

@@ -1,0 +1,20 @@
+; ModuleID = 'myprogram'
+source_filename = "myprogram"
+
+define void @simple_declaration() {
+simple_declaration:
+}
+
+define void @main() {
+main:
+}
+
+define void @function_with_ret_val() {
+function_with_ret_val:
+  ret i32 3
+}
+
+define void @func_with_hex_ret_val() {
+func_with_hex_ret_val:
+  ret i32 128
+}

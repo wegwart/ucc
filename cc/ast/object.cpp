@@ -1,5 +1,4 @@
 #include <ast/object.h>
-#include <cassert>
 
 using namespace ast;
 

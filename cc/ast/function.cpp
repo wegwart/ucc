@@ -1,6 +1,6 @@
+#include <ast/visitor.h>
 #include <ast/function.h>
-#include <cassert>
-#include <parser.h>
+#include <ast/statement.h>
 
 using namespace ast;
 
@@ -27,6 +27,11 @@ FunctionDefinition::FunctionDefinition(size_t decl, size_t stmt)
 std::shared_ptr<const FunctionDeclaration> FunctionDefinition::getDeclaration() const
 {
     return m_declaration;
+}
+
+std::shared_ptr<const Statement> FunctionDefinition::getImplementation() const
+{
+    return m_implementation;
 }
 
 void FunctionDefinition::visit(AstVisitor* visitor) const

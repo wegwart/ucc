@@ -23,6 +23,8 @@ static void compile(FILE* f)
 
     codegen::CodeGenerator generator{ "myprogram" };
     ast::Ast::get().visit(&generator);
+
+    generator.print();
 }
 
 int main(int argc, char* argv[])

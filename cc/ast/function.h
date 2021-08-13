@@ -1,12 +1,11 @@
 #pragma once
 
 #include <string>
-#include <vector>
-
-#include <ast/statement.h>
 #include <ast/object.h>
 
 namespace ast {
+
+    class Statement;
 
     class FunctionDeclaration : public AstObject
     {
@@ -27,6 +26,7 @@ namespace ast {
         FunctionDefinition(size_t decl, size_t stmt);
 
         std::shared_ptr<const FunctionDeclaration> getDeclaration() const;
+        std::shared_ptr<const Statement> getImplementation() const;
 
         void visit(AstVisitor* visitor) const override;
       

@@ -1,5 +1,12 @@
-#include <codegen/generator.h>
 #include <cassert>
+#include <cstdint>
+
+#include <ast/function.h>
+#include <ast/statement.h>
+#include <ast/literals.h>
+#include <codegen/generator.h>
+
+#include <llvm/Support/raw_ostream.h>
 
 namespace codegen {
 
@@ -19,16 +26,19 @@ namespace codegen {
         m_context.reset();
     }
 
+    void CodeGenerator::print()
+    {
+        m_module->print(llvm::outs(), nullptr);
+    }
+
     void CodeGenerator::visitFunctionDeclaration(
         std::shared_ptr<const ast::FunctionDeclaration> functionDeclaration)
     {
         if (m_module->getFunction(functionDeclaration->getName()))
         {
-            printf("warning: function has already been declared\n");
+            // function has already been declared.
             return;
         }
-
-        printf("llvm gen: declaring function %s()\n", functionDeclaration->getName().c_str());
 
         // generate the function type
         std::vector<llvm::Type*> args;
@@ -52,19 +62,43 @@ namespace codegen {
         auto function = m_module->getFunction(declaration->getName());
         if (!function)
         {
-            printf("function hasn't yet been declared!\n");
+            // function has already been implemented
             return;
         }
 
-        printf("llvm-gen: generating code for function %s()\n", declaration->getName().c_str());  
-        
-        // llvm::BasicBlock* impl =
-        //     llvm::BasicBlock::Create(*m_context, function->name(), codeFunction);
-        // m_builder->SetInsertPoint(impl);
+        llvm::BasicBlock* impl = // Do I have to delete this?
+            llvm::BasicBlock::Create(*m_context, declaration->getName(), function);
+        m_builder->SetInsertPoint(impl);
 
-        // TODO: bring function arguments into scope! -> ScopeStack?
-        // TODO: generate code for the statements
+        functionDefinition->getImplementation()->visit(this);
+    }
 
+    void CodeGenerator::visitReturnStatement(
+        std::shared_ptr<const ast::ReturnStatement> returnStatement)
+    {
+        m_result = nullptr;
+        if (returnStatement->hasValue())
+        {
+            // if a return value expression was passed to the return
+            // operator, first evaluate it and then return the result
+            // m_result will be filled with the return value.
+            returnStatement->getExpression()->visit(this);
+        }
+
+        m_builder->CreateRet(m_result);
+    }
+
+
+    void CodeGenerator::visitIntLiteralExpr(
+        std::shared_ptr<const ast::IntLiteral> intLiteralExpr)
+    {
+        auto value = intLiteralExpr->getValue();
+
+        auto type = llvm::IntegerType::getInt32Ty(*m_context);
+        if (value > UINT32_MAX)
+            type = llvm::IntegerType::getInt64Ty(*m_context);
+    
+        m_result = llvm::ConstantInt::get(type, llvm::APInt(32, value));
     }
 
 }

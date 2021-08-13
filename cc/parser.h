@@ -6,6 +6,7 @@
 
 #include <ast/object.h>
 #include <ast/function.h>
+#include <ast/literals.h>
 #include <ast/statement.h>
 
 #define AST_ADD(t, ...) \

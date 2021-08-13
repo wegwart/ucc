@@ -10,12 +10,15 @@
 
 %union {
     char token[128];
+    uint64_t integer;
     size_t ast_object;
 }
 
 %token RETURN SIZEOF CONST
 %token <token> IDENTIFIER
-%type <ast_object> function_declaration statement statement_list
+%token <integer> INT_LITERAL
+%type <ast_object> function_declaration statement statement_list expression
+    primary_expression
 
 %start declaration_list
 
@@ -47,6 +50,16 @@ statement_list          : statement                                     { $$ = A
                         ;
 
 statement               : ';'                                           { $$ = AST_ADD(EmptyStatement); }
+                        | RETURN ';'                                    { $$ = AST_ADD(ReturnStatement); }
+                        | RETURN expression ';'                         { $$ = AST_ADD(ReturnStatement, $2); }
                         ;
+
+expression              : primary_expression                            { $$ = $1; }
+                        ;
+
+primary_expression      : '(' expression ')'                            { $$ = $2; }
+                        | INT_LITERAL                                   { $$ = AST_ADD(IntLiteral, $1); }
+                        ;
+
 
 %%

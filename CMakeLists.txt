@@ -11,8 +11,9 @@ message(STATUS "Found flex ${FLEX_VERSION}")
 message(STATUS "Found bison ${BISON_VERSION}")
 
 # find LLVM for code generation
-find_package(LLVM REQUIRED CONFIG)
+find_package(LLVM 12.0.0 REQUIRED CONFIG)
 message(STATUS "Found LLVM ${LLVM_PACKAGE_VERSION}")
+message(STATUS "LLVM include path: ${LLVM_INCLUDE_DIRS}")
 message(STATUS "Using LLVMConfig.cmake in: ${LLVM_DIR}")
 llvm_map_components_to_libnames(llvm_libs support core irreader)
 
@@ -36,6 +37,9 @@ add_executable(ucc
     cc/ast/object.cpp
     cc/ast/function.h
     cc/ast/function.cpp
+    cc/ast/literals.h
+    cc/ast/literals.cpp
+    cc/ast/expression.h
     cc/ast/statement.h
     cc/ast/statement.cpp
     cc/codegen/generator.h
@@ -44,6 +48,7 @@ add_executable(ucc
     ${FLEX_ucc_lexer_OUTPUTS}
 )
 target_link_libraries(ucc ${llvm_libs})
+target_include_directories(ucc PRIVATE ${LLVM_INCLUDE_DIRS})
 target_include_directories(ucc PRIVATE ${CMAKE_BINARY_DIR})
 target_include_directories(ucc PRIVATE ${CMAKE_SOURCE_DIR}/cc)
 

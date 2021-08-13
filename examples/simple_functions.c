@@ -1,6 +1,0 @@
-
-void test();
-
-void test() {
-    ;
-}
