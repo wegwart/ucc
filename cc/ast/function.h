@@ -1,23 +1,27 @@
 #pragma once
 
 #include <string>
+#include <ast/type.h>
 #include <ast/object.h>
 
 namespace ast {
 
     class Statement;
+    class Typename;
 
     class FunctionDeclaration : public AstObject
     {
       public:
-        FunctionDeclaration(const std::string& name);
+        FunctionDeclaration(const std::string& name, size_t returnType);
 
         const std::string& getName() const;
+        const Typename& getReturnType() const;
 
         void visit(AstVisitor* visitor) const override;
       
       private:
         std::string m_name;
+        Typename m_returnType;
     };
 
     class FunctionDefinition : public AstObject

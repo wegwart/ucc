@@ -35,6 +35,12 @@ add_executable(ucc
     cc/parser.cpp
     cc/ast/object.h
     cc/ast/object.cpp
+    cc/ast/type.h
+    cc/ast/type.cpp
+    cc/typesys/type.h
+    cc/typesys/type.cpp
+    cc/typesys/typemap.h
+    cc/typesys/typemap.cpp
     cc/ast/function.h
     cc/ast/function.cpp
     cc/ast/literals.h

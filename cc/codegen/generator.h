@@ -9,12 +9,15 @@
 #include <llvm/IR/IRBuilder.h>
 
 namespace ast {
-
     class FunctionDeclaration;
     class FunctionDefinition;
     class ReturnStatement;
     class IntLiteral;
-    
+    class Typename;
+}
+
+namespace typesys {
+    class TypeMap;
 }
 
 namespace codegen {
@@ -22,10 +25,12 @@ namespace codegen {
     class CodeGenerator : public ast::AstVisitor
     {
       public:
-        CodeGenerator(const std::string& programName);
+        CodeGenerator(const std::string& programName, typesys::TypeMap& typeMap);
         ~CodeGenerator();
 
         void print();
+
+        llvm::Type* getLlvmType(const ast::Typename& type);
 
         void visitFunctionDeclaration(
             std::shared_ptr<const ast::FunctionDeclaration> functionDeclaration) override;        
@@ -40,6 +45,8 @@ namespace codegen {
             std::shared_ptr<const ast::IntLiteral> intLiteralExpr) override;
       
       private:
+        typesys::TypeMap& m_types;
+
         std::unique_ptr<llvm::Module> m_module;
         std::unique_ptr<llvm::LLVMContext> m_context;
         std::unique_ptr<llvm::IRBuilder<>> m_builder;

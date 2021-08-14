@@ -5,6 +5,7 @@
 #include <string>
 
 #include <parser.h>
+#include <typesys/typemap.h>
 #include <codegen/generator.h>
 
 static void print_version()
@@ -21,7 +22,9 @@ static void compile(FILE* f)
 {
     parse(f);
 
-    codegen::CodeGenerator generator{ "myprogram" };
+    typesys::TypeMap typeTable;
+
+    codegen::CodeGenerator generator{ "myprogram", typeTable };
     ast::Ast::get().visit(&generator);
 
     generator.print();

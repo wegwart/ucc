@@ -18,7 +18,7 @@
 %token <token> IDENTIFIER
 %token <integer> INT_LITERAL
 %type <ast_object> function_declaration statement statement_list expression
-    primary_expression
+    primary_expression type_ref
 
 %start declaration_list
 
@@ -33,16 +33,16 @@ declaration             : function_declaration ';'
                         | function_declaration '{' statement_list '}'   { AST_ADD_TOP(FunctionDefinition, $1, $3); }
                         ;
 
-function_declaration    : type_ref IDENTIFIER '(' ')'                   { $$ = AST_ADD_TOP(FunctionDeclaration, $2); }
-                        | type_ref IDENTIFIER '(' arg_list ')'          { $$ = AST_ADD_TOP(FunctionDeclaration, $2); }
+function_declaration    : type_ref IDENTIFIER '(' ')'                   { $$ = AST_ADD_TOP(FunctionDeclaration, $2, $1); }
+                        | type_ref IDENTIFIER '(' arg_list ')'          { $$ = AST_ADD_TOP(FunctionDeclaration, $2, $1); }
                         ;
 
 arg_list                : type_ref IDENTIFIER
                         | arg_list ',' type_ref IDENTIFIER
                         ;
 
-type_ref                : IDENTIFIER
-                        | type_ref '*'
+type_ref                : IDENTIFIER                                    { $$ = AST_ADD(Typename, $1); }
+                        | type_ref '*'                                  { $$ = $1; }
                         ;
 
 statement_list          : statement                                     { $$ = AST_ADD(StatementList, $1); }

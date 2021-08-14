@@ -5,6 +5,7 @@
 #include <vector>
 
 #include <ast/object.h>
+#include <ast/type.h>
 #include <ast/function.h>
 #include <ast/literals.h>
 #include <ast/statement.h>

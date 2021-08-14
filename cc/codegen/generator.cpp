@@ -4,13 +4,16 @@
 #include <ast/function.h>
 #include <ast/statement.h>
 #include <ast/literals.h>
+#include <typesys/type.h>
+#include <typesys/typemap.h>
 #include <codegen/generator.h>
 
 #include <llvm/Support/raw_ostream.h>
 
 namespace codegen {
 
-    CodeGenerator::CodeGenerator(const std::string& programName)
+    CodeGenerator::CodeGenerator(const std::string& programName, typesys::TypeMap& typeMap)
+        : m_types(typeMap)
     {
         m_context = std::make_unique<llvm::LLVMContext>();
         m_module = std::make_unique<llvm::Module>(programName, *m_context);
@@ -31,6 +34,17 @@ namespace codegen {
         m_module->print(llvm::outs(), nullptr);
     }
 
+    llvm::Type* CodeGenerator::getLlvmType(const ast::Typename& type)
+    {
+        auto actualType = m_types.findType(type);
+        
+        if (actualType->isInteger())
+            return llvm::Type::getIntNTy(*m_context, actualType->getBitSize());
+        
+        assert(false);
+        return nullptr;
+    }
+
     void CodeGenerator::visitFunctionDeclaration(
         std::shared_ptr<const ast::FunctionDeclaration> functionDeclaration)
     {
@@ -42,7 +56,7 @@ namespace codegen {
 
         // generate the function type
         std::vector<llvm::Type*> args;
-        auto returnType = llvm::Type::getVoidTy(*m_context);
+        auto returnType = getLlvmType(functionDeclaration->getReturnType());
         auto functionType = llvm::FunctionType::get(returnType, args, false);
 
         // declare the function
