@@ -12,3 +12,22 @@ on your machine before you can build:
 * bison
 * flex
 * llvm-12-dev
+
+### Build compiler
+```
+$ mkdir build && cd build && cmake ..
+$ cmake --build .
+```
+
+### Run compiler and generate executable
+
+```
+$ /ucc ../examples/simple_program.c > simple_program.ll
+$ llvm-as-12 simple_program.ll -o simple_program.bc
+$ llc-12 simple_program.bc -o simple_program.S
+$ clang simple_program.S -o simple_program
+$ ./simple_program ; echo $?
+
+```
+
+see also https://github.com/ulmer-a/ucc/issues/4
