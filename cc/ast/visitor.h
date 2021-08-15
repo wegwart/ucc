@@ -8,6 +8,7 @@ namespace ast {
     class FunctionDefinition;
     class ReturnStatement;
     class IntLiteral;
+    class VarReference;
 
     class AstVisitor
     {
@@ -26,6 +27,12 @@ namespace ast {
         
         virtual void visitIntLiteralExpr(
             std::shared_ptr<const IntLiteral> intLiteralExpr) = 0;
+
+        virtual void visitVarReference(
+            std::shared_ptr<const VarReference> variable) 
+            {
+
+            }
     };
 
 }

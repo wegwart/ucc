@@ -9,6 +9,7 @@
 #include <ast/function.h>
 #include <ast/literals.h>
 #include <ast/statement.h>
+#include <ast/variables.h>
 
 #define AST_ADD(t, ...) \
     ast::Ast::get().add(std::make_shared<ast::t>(__VA_ARGS__))

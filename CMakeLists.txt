@@ -48,6 +48,8 @@ add_executable(ucc
     cc/ast/expression.h
     cc/ast/statement.h
     cc/ast/statement.cpp
+    cc/ast/variables.h
+    cc/ast/variables.cpp
     cc/codegen/generator.h
     cc/codegen/generator.cpp
     ${BISON_ucc_parser_OUTPUTS}

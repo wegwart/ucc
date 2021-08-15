@@ -19,3 +19,6 @@ endmacro()
 # C Compiler Tests
 cc_success_test("simple_functions")
 cc_ir_test("simple_functions")
+
+cc_success_test("function_call")
+cc_ir_test("function_call")

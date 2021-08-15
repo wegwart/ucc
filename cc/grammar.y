@@ -18,7 +18,7 @@
 %token <token> IDENTIFIER
 %token <integer> INT_LITERAL
 %type <ast_object> function_declaration statement statement_list expression
-    primary_expression type_ref
+    postfix_expression primary_expression type_ref
 
 %start declaration_list
 
@@ -54,12 +54,18 @@ statement               : ';'                                           { $$ = A
                         | RETURN expression ';'                         { $$ = AST_ADD(ReturnStatement, $2); }
                         ;
 
-expression              : primary_expression                            { $$ = $1; }
+expression              : postfix_expression                            { $$ = $1; }
                         ;
 
+postfix_expression      : primary_expression                            { $$ = $1; }
+	                    | postfix_expression '(' ')'
+	                    ;
+    
 primary_expression      : '(' expression ')'                            { $$ = $2; }
                         | INT_LITERAL                                   { $$ = AST_ADD(IntLiteral, $1); }
+                        | IDENTIFIER                                    { $$ = AST_ADD(VarReference, $1); }
                         ;
+
 
 
 %%
