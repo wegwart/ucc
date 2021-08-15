@@ -22,11 +22,21 @@ $ cmake --build .
 ### Run compiler and generate executable
 
 ```
-$ /ucc ../examples/simple_program.c > simple_program.ll
+$ ./ucc ../examples/simple_program.c > simple_program.ll
 $ llvm-as-12 simple_program.ll -o simple_program.bc
 $ llc-12 simple_program.bc -o simple_program.S
 $ clang simple_program.S -o simple_program
 $ ./simple_program ; echo $?
+
+```
+
+
+```
+$ ./ucc ../tests/cc/function_call.c > function_call.ll
+$ llvm-as-12 function_call.ll -o function_call.bc
+$ llc-12 function_call.bc -o function_call.S
+$ clang function_call.S -o function_call
+$ ./function_call ; echo $?
 
 ```
 
