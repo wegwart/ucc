@@ -8,44 +8,51 @@
 #include <llvm/IR/LLVMContext.h>
 #include <llvm/IR/IRBuilder.h>
 
-namespace ast {
+namespace ast
+{
     class FunctionDeclaration;
     class FunctionDefinition;
     class ReturnStatement;
     class IntLiteral;
     class Typename;
+    class FunctionCall;
 }
 
-namespace typesys {
+namespace typesys
+{
     class TypeMap;
 }
 
-namespace codegen {
+namespace codegen
+{
 
     class CodeGenerator : public ast::AstVisitor
     {
-      public:
-        CodeGenerator(const std::string& programName, typesys::TypeMap& typeMap);
+    public:
+        CodeGenerator(const std::string &programName, typesys::TypeMap &typeMap);
         ~CodeGenerator();
 
         void print();
 
-        llvm::Type* getLlvmType(const ast::Typename& type);
+        llvm::Type *getLlvmType(const ast::Typename &type);
 
         void visitFunctionDeclaration(
-            std::shared_ptr<const ast::FunctionDeclaration> functionDeclaration) override;        
-        
+            std::shared_ptr<const ast::FunctionDeclaration> functionDeclaration) override;
+
         void visitFunctionDefinition(
             std::shared_ptr<const ast::FunctionDefinition> functionDefinition) override;
-        
+
         void visitReturnStatement(
             std::shared_ptr<const ast::ReturnStatement> returnStatement) override;
 
         void visitIntLiteralExpr(
             std::shared_ptr<const ast::IntLiteral> intLiteralExpr) override;
-      
-      private:
-        typesys::TypeMap& m_types;
+
+        void visitFunctionCall(
+            std::shared_ptr<const ast::FunctionCall> functionCall) override;
+
+    private:
+        typesys::TypeMap &m_types;
 
         std::unique_ptr<llvm::Module> m_module;
         std::unique_ptr<llvm::LLVMContext> m_context;
@@ -53,8 +60,8 @@ namespace codegen {
 
         // Since we cannot return results from a visitor,
         // an AST child's code generation result is stored
-        // in the following member variable. 
-        llvm::Value* m_result;
+        // in the following member variable.
+        llvm::Value *m_result;
     };
-    
+
 } // namespace codegen

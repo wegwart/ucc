@@ -9,6 +9,7 @@ namespace ast {
     class ReturnStatement;
     class IntLiteral;
     class VarReference;
+    class FunctionCall;
 
     class AstVisitor
     {
@@ -33,6 +34,10 @@ namespace ast {
             {
 
             }
+
+        virtual void visitFunctionCall(
+            std::shared_ptr<const FunctionCall> functionCall) = 0;
+
     };
 
 }

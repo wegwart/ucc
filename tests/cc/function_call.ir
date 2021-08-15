@@ -1,0 +1,13 @@
+; ModuleID = 'myprogram'
+source_filename = "myprogram"
+
+define i32 @test() {
+test:
+  ret i32 144
+}
+
+define i32 @main() {
+main:
+  %0 = call i32 @test()
+  ret i32 %0
+}

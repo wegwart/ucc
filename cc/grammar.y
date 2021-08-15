@@ -58,7 +58,7 @@ expression              : postfix_expression                            { $$ = $
                         ;
 
 postfix_expression      : primary_expression                            { $$ = $1; }
-	                    | postfix_expression '(' ')'
+	                    | postfix_expression '(' ')'                    { $$ = AST_ADD(FunctionCall, $1); }
 	                    ;
     
 primary_expression      : '(' expression ')'                            { $$ = $2; }

@@ -1,9 +1,11 @@
 #include <cassert>
 #include <cstdint>
+#include <iostream>
 
 #include <ast/function.h>
 #include <ast/statement.h>
 #include <ast/literals.h>
+#include <ast/variables.h>
 #include <typesys/type.h>
 #include <typesys/typemap.h>
 #include <codegen/generator.h>
@@ -113,6 +115,26 @@ namespace codegen {
             type = llvm::IntegerType::getInt64Ty(*m_context);
     
         m_result = llvm::ConstantInt::get(type, llvm::APInt(32, value));
+    }
+
+
+    void CodeGenerator::visitFunctionCall(
+        std::shared_ptr<const ast::FunctionCall> functionCall)
+    {
+        auto functionExpression = functionCall->getExpression();
+        auto varReference = std::dynamic_pointer_cast<const ast::VarReference>(functionExpression);
+        if(!varReference)
+        {
+            return;
+        }
+
+        //std::cout << varReference->getIdentifier() << std::endl;
+
+        std::vector<llvm::Value*> args;
+        auto callee = m_module->getFunction(varReference->getIdentifier());
+        auto retValue = m_builder->CreateCall(callee, args);
+
+        m_result = retValue;
     }
 
 }

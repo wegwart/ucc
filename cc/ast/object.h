@@ -4,6 +4,8 @@
 #include <vector>
 #include <memory>
 #include <cassert>
+#include <iostream>
+#include <typeinfo>
 
 namespace ast {
 
@@ -22,7 +24,11 @@ namespace ast {
         std::shared_ptr<T> resolve(size_t id)
         {
           auto object = std::dynamic_pointer_cast<T>(find(id));
-          assert(object);
+          if (!object)
+          {
+            std::cout << "error: invalid cast from obj " << id << " which is " << typeid(object).name() << std::endl;
+            assert(false);
+          }
           return object;
         }
 

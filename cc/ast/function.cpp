@@ -1,6 +1,7 @@
 #include <ast/visitor.h>
 #include <ast/function.h>
 #include <ast/statement.h>
+#include <ast/expression.h>
 #include <ast/type.h>
 
 using namespace ast;
@@ -46,4 +47,20 @@ std::shared_ptr<const Statement> FunctionDefinition::getImplementation() const
 void FunctionDefinition::visit(AstVisitor* visitor) const
 {
     visitor->visitFunctionDefinition(Ast::get().resolve<FunctionDefinition>(getId()));
+}
+
+
+FunctionCall::FunctionCall(size_t expression)
+{
+    m_expression = Ast::get().resolve<Expression>(expression);
+}
+
+std::shared_ptr<const Expression> FunctionCall::getExpression() const
+{
+    return m_expression;
+}
+
+void FunctionCall::visit(AstVisitor *visitor) const 
+{
+    visitor->visitFunctionCall(Ast::get().resolve<FunctionCall>(getId()));
 }
